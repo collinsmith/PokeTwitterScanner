@@ -15,7 +15,7 @@ import time
 from codes import *
 
 g_since_id = 0
-f = open('san_gabriel.csv', 'w')
+f = open('pokearcadia2.csv', 'w')
 
 def paginate(iterable, page_size):
     while True:
@@ -32,7 +32,7 @@ def process_status(status):
         text = status.text
         text = re.sub("A wild ", "", text)
         text = re.sub(" has appeared in .+! Available until ", ",", text)
-        text = re.sub("(?<=\dam|\dpm).+\. #PokeSanGabriel #PokemonGo ", ",", text)
+        text = re.sub("(?<=\dam|\dpm).+\. #PokemonGo #PokeArcadia ", ",", text)
         tmp = text.split(",")
         pokemon = tmp[0]
         time = str(status.created_at)
@@ -71,7 +71,10 @@ auth.set_access_token(access_token, access_token_secret)
 
 api = tweepy.API(auth)
 
-for status in tweepy.Cursor(api.user_timeline, screen_name="pokesangabriel").items():
+for status in tweepy.Cursor(api.user_timeline, screen_name="pokearcadia").items():
+    if status.id <= 781384100305186816:
+        break
+        
     process_status(status)
     time.sleep(6)
 
