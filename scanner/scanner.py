@@ -14,8 +14,12 @@ import time
 
 from codes import *
 
+filename = 'pokearcadia2.csv'
+subregex = "(?<=\dam|\dpm).+\. #PokemonGo #PokeArcadia "
+twitterhandle = "pokearcadia"
+
 g_since_id = 0
-f = open('pokearcadia2.csv', 'w')
+f = open(filename, 'w')
 
 def paginate(iterable, page_size):
     while True:
@@ -32,7 +36,7 @@ def process_status(status):
         text = status.text
         text = re.sub("A wild ", "", text)
         text = re.sub(" has appeared in .+! Available until ", ",", text)
-        text = re.sub("(?<=\dam|\dpm).+\. #PokemonGo #PokeArcadia ", ",", text)
+        text = re.sub(subregex, ",", text)
         tmp = text.split(",")
         pokemon = tmp[0]
         time = str(status.created_at)
@@ -71,7 +75,7 @@ auth.set_access_token(access_token, access_token_secret)
 
 api = tweepy.API(auth)
 
-for status in tweepy.Cursor(api.user_timeline, screen_name="pokearcadia").items():
+for status in tweepy.Cursor(api.user_timeline, screen_name=twitterhandle).items():
     if status.id <= 781384100305186816:
         break
         
