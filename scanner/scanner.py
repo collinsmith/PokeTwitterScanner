@@ -17,6 +17,7 @@ from codes import *
 filename = 'pokearcadia2.csv'
 subregex = "(?<=\dam|\dpm).+\. #PokemonGo #PokeArcadia "
 twitterhandle = "pokearcadia"
+skipIdsLessThan = 781384100305186816
 
 g_since_id = 0
 f = open(filename, 'w')
@@ -76,7 +77,7 @@ auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
 for status in tweepy.Cursor(api.user_timeline, screen_name=twitterhandle).items():
-    if status.id <= 781384100305186816:
+    if status.id <= skipIdsLessThan:
         break
         
     process_status(status)
